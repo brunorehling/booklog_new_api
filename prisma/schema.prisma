@@ -14,44 +14,53 @@ datasource db {
 
 
 model User { 
-  id            Int     @id @default(autoincrement()) 
-  email         String  @db.VarChar(45)
-  senha         String  @db.VarChar(20)
-  name          String?
-
+  id            Int       @id @default(autoincrement()) 
+  email         String    @db.VarChar(45)
+  senha         String    @db.VarChar(20)
+  name          String    @db.VarChar(50)
+  description   String    @db.VarChar(300)
+  CreatedAt     DateTime  @default(now())
+  UpdatedAt     DateTime  @updatedAt
 
   comments Comment[]
   reviews Review[]
+  @@map("Usuario")
 } 
 
 model Review{
-  id            Int     @id @default(autoincrement())
+  id            Int       @id @default(autoincrement())
   UserId        Int
   BookId        Int
-  title         String
+  title         String    @db.VarChar(50)
+  content       String    @db.VarChar(300)
+  rate          Int
 
-  Book        Book    @relation(fields: [BookId], references: [id]) 
-  User        User    @relation(fields: [UserId], references: [id]) 
+  Book          Book      @relation(fields: [BookId], references: [id]) 
+  User          User      @relation(fields: [UserId], references: [id]) 
 
-
-  comments Comment[]
-}
+  comments      Comment[]
+} 
 
 model Book {
-  id            Int     @id @default(autoincrement())
-  name          String  @unique
-  description   String 
+  id            Int       @id @default(autoincrement())
+  name          String    @unique @db.VarChar(50)
+  description   String    @db.VarChar(300)
+  author        String    @db.VarChar(50)
+  rating        Float
 
-  reviews Review[]
+  reviews       Review[]
 }
 
 model Comment{
-  id            Int   @id @default(autoincrement())
+  id            Int       @id @default(autoincrement())
   UserId        Int   
   ReviewId      Int
-  content       String
-  likes         Int
-  deslikes      Int
-  author        User    @relation(fields: [UserId], references: [id]) 
-  Review        Review  @relation(fields: [ReviewId], references: [id]) 
+  content       String    @db.VarChar(200)
+  likes         Int       @default(0)
+  deslikes      Int       @default(0)
+  reports       Int       @default(0)
+
+
+  author        User      @relation(fields: [UserId], references: [id]) 
+  Review        Review    @relation(fields: [ReviewId], references: [id]) 
 }
