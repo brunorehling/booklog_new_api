@@ -17,9 +17,9 @@ router.get('/:id', async (req : Request, res : Response) => {
 })
 
 router.post('/', async (req: Request, res: Response) => {
-  const {name, description, author, rating} = req.body
+  const {name, description, author} = req.body
   const book = await prisma.book.create({   
-    data: {name, description, author, rating }
+    data: {name, description, author}
   })
   res.status(201).json(book)
 })

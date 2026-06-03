@@ -46,7 +46,7 @@ model Book {
   name          String    @unique @db.VarChar(50)
   description   String    @db.VarChar(300)
   author        String    @db.VarChar(50)
-  rating        Float     
+  rating        Float     @default(0)
 
   reviews       Review[]
 }
@@ -62,5 +62,7 @@ model Comment{
 
 
   author        User      @relation(fields: [UserId], references: [id]) 
-  Review        Review    @relation(fields: [ReviewId], references: [id]) 
+  Review        Review    @relation(fields: [ReviewId], references: [id])
+
+  @@map("Comentario") 
 }
