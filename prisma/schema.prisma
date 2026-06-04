@@ -16,7 +16,7 @@ datasource db {
 model User { 
   id            Int       @id @default(autoincrement()) 
   email         String    @db.VarChar(45)
-  senha         String    @db.VarChar(20)
+  senha         String    @db.VarChar(60)
   name          String    @db.VarChar(50)
   description   String    @db.VarChar(300)
   CreatedAt     DateTime  @default(now())
@@ -25,6 +25,7 @@ model User {
   comments Comment[]
   reviews Review[]
   @@map("Usuario")
+  commentReactions CommentReaction[]
 } 
 
 model Review{
@@ -51,18 +52,29 @@ model Book {
   reviews       Review[]
 }
 
-model Comment{
-  id            Int       @id @default(autoincrement())
-  UserId        Int   
-  ReviewId      Int
-  content       String    @db.VarChar(200)
-  likes         Int       @default(0)
-  deslikes      Int       @default(0)
-  reports       Int       @default(0)
+model Comment {
+  id        Int      @id @default(autoincrement())
+  UserId    Int
+  ReviewId  Int
+  content   String   @db.VarChar(200)
+  reports   Int      @default(0)
 
+  author    User     @relation(fields: [UserId], references: [id])
+  Review    Review   @relation(fields: [ReviewId], references: [id])
+  reactions CommentReaction[]
 
-  author        User      @relation(fields: [UserId], references: [id]) 
-  Review        Review    @relation(fields: [ReviewId], references: [id])
+  @@map("Comentario")
+}
 
-  @@map("Comentario") 
+model CommentReaction {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  commentId Int
+  type      String   
+
+  user      User     @relation(fields: [userId], references: [id])
+  comment   Comment  @relation(fields: [commentId], references: [id])
+
+  @@unique([userId, commentId])
+  @@map("ReacaoComentario")
 }

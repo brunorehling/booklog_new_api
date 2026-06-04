@@ -5,7 +5,7 @@ const adapter = new PrismaMariaDb({
   host: 'localhost',
   port: 3306,
   user: 'root',
-  password: 'senha secreta',
+  password: '08042004',
   database: 'Booklog'
 })
 
